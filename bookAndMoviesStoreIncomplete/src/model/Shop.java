@@ -3,12 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 /**
  * 
  * @author angievig
  *
  */
 public class Shop {
+
+	
 
 	/**
 	 * Constante con el valor del impuesto
@@ -71,7 +74,19 @@ public class Shop {
 	 * informando que el producto ya existe. 
 	 */
 	public String addProduct(String code,String name, int units, double price, ProductType type) {
-		return "";
+		for (int i=0;i<catalog.size() ;i ++ ) {
+			if(ArrayList.get(i).getCode().equals(catalog)){
+					System.out.println("El producto ya existe");
+			}
+			else {
+				catalog.add(new ProductForSale(code,name, units, price, type));
+			}
+		}
+			
+		
+
+		return "El producto ha sido agregado";
+
 	}
 	
 
@@ -89,7 +104,16 @@ public class Shop {
 	 * informando que el producto ya existe. 
 	 */
 	public String addProduct(String code, String name, double price, ProductType type) {
-		return "";
+		for (int o=0;o < catalog.size() ; o ++ ) {
+			if (ArrayList.get(o).getCode().equals(catalog)) {
+				System.out.println("El producto ya fue agregado al catalogo");
+			}
+			else {
+				catalog.add(new ProductForRent(code,name,price,type));
+			}
+		}
+
+		return "El producto ha sido agregado";
 	}
 	
 	/**
@@ -98,6 +122,8 @@ public class Shop {
 	 * @return cadena con la informacion de los productos
 	 */
 	public String showCatalog() {
+
+
 		return "";
 	}
 	
