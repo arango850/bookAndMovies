@@ -76,7 +76,7 @@ public abstract class Product {
 		this.units = units;
 	}
 	
-	public double getPrice(int units) {
+	public double getPrice() {
 		return price;
 	}
 	public void setPrice(double price) {
@@ -92,7 +92,7 @@ public abstract class Product {
 	public ProductType getType() {
 		return type;
 	}
-	public void setType(ProductType type) {
+	public void setType(ProductType type ) {
 		this.type = type;
 	}
 

@@ -7,27 +7,52 @@ public class ProductForRent extends Product implements Rentable{
 
 	private State state;
 
-	public ProductForRent(java.lang.String code, java.lang.String name,  double price, ProductType type   ){
+	public ProductForRent(String code, String name,  double price, ProductType type   ){
 		super(code, name,1, price, type  );
 		this.state=State.AVAILABLE;
 		LocalDate devolutionDate = LocalDate.of(2021,05,28);
 		
 	}
 	
-	public void rentProduct(int amountDays ){
+	public void rentProduct(int amountDays  ){
 		this.state=State.RENTED;
-		
+		devolutionDate=devolutionDate.plusDays(amountDays);
 	}
-		
-	public double getRentPrice(double amountDays ){
-		return 0;
+	@Override	
+	public double getRentPrice(int amountDays ){
+		double totalPrice=amountDays*price;
+		return totalPrice;
 	}
-	
-	public java.lang.String getInformation(){
-		return "";
-	}
-	
+	@Override
+	public String getInformation(){
+		String out="";
+		out= "El codigo es:"+ getCode()+"\n"+ "El nombre es: "+ getName()+ "\n"+ "Las unidades son"+ getUnits()+ "\n"+ "El precio es: "+ getPrice(); 
+		switch (getType()){
+
+			case BOOK:
+			out += "Tipo Libro";
+			break;
+			case MAGAZINE:
+			out += "Tipo Revista";
+			break;
+			case DVD_MOVIE:
+			out += "Tipo pelicula en DVD";
+			break;
+			case DOWNLOAD_MOVIE:
+			out+= "Tipo pelicula descargada";
+			break;
+		}
+
+return out;
+		}
+
+	@Override	
 	public boolean isSafeRent(){
-		return true;
+		boolean a = false;
+
+		if (state==state.AVAILABLE) {
+			a=true;		
+		}
+		return a;
 	}
 }

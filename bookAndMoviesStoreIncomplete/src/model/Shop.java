@@ -74,20 +74,28 @@ public class Shop {
 	 * informando que el producto ya existe. 
 	 */
 	public String addProduct(String code,String name, int units, double price, ProductType type) {
-		for (int i=0;i<catalog.size() ;i ++ ) {
-			if(ArrayList.get(i).getCode().equals(catalog)){
-					System.out.println("El producto ya existe");
+		String out= "";
+		boolean n =false;
+		for (int i=0;!n && i<catalog.size() ;i ++ ) {
+			if(catalog.get(i).getCode().equals(code)){
+					out= "El producto ya existe ";
+					n=true;
 			}
-			else {
-				catalog.add(new ProductForSale(code,name, units, price, type));
+		}
+			if(!n){
+				ProductForSale objSale= new ProductForSale(code,name,units,price,type);
+				catalog.add(objSale);
+				out="El producto ha sido agregado con exito";
+				
 			}
+		return out;	
 		}
 			
 		
 
-		return "El producto ha sido agregado";
+	
 
-	}
+	
 	
 
 
@@ -104,16 +112,24 @@ public class Shop {
 	 * informando que el producto ya existe. 
 	 */
 	public String addProduct(String code, String name, double price, ProductType type) {
+		String out = "";
+		boolean n = false;
 		for (int o=0;o < catalog.size() ; o ++ ) {
-			if (ArrayList.get(o).getCode().equals(catalog)) {
-				System.out.println("El producto ya fue agregado al catalogo");
+			if (catalog.get(o).getCode().equalsIgnoreCase(code)) {
+				out="El producto ya fue agregado al catalogo";
+			 n=true;
 			}
-			else {
-				catalog.add(new ProductForRent(code,name,price,type));
-			}
+			
+		}
+		if (!n) {
+			ProductForRent objRent = new ProductForRent(code, name,price,type);
+			catalog.add(objRent);
+			out="El producto se ha añadido exitosamente";
+
+
 		}
 
-		return "El producto ha sido agregado";
+		return out;
 	}
 	
 	/**
@@ -122,9 +138,13 @@ public class Shop {
 	 * @return cadena con la informacion de los productos
 	 */
 	public String showCatalog() {
+		String out = "";
+		for(int a=0;a<catalog.size();a++) {
+			out+= catalog.get(a).getInformation();
+			out += "\n";
+		}
 
-
-		return "";
+		return out;
 	}
 	
 	/**
@@ -138,6 +158,12 @@ public class Shop {
 	 */
 	public Product findProduct(String code) {
 		Product p=null;
+
+		for (int e=0;e< catalog.size() ;e++ ) {
+			if (catalog.get(e).getCode().equalsIgnoreCase(code)) {
+				p=catalog.get(e);
+			}
+		}
 		
 		return p;
 	}
@@ -216,8 +242,20 @@ public class Shop {
 	 *  (numero entre 0 y 1)units int cantidad de unidades a vender
 	 * @return un mensaje con el resultado de la venta
 	 */
-	private  String sale(Saleable p, int units, double discount) {
-		
+	private  String  sale(Saleable p, int units, double discount) {
+		String out="";
+		double price=0;
+
+		if(p.isSafeSale(units)){
+			price=p.getSalePrice(units);
+			price=p.applyExtraDiscount(price, discount);
+			price=p.calculateTax(price,TAX_IVA);
+
+			totalSales+=price;
+			out= "Se ha vendido un producto con el valor de  " + price;
+		}else{
+			out="El producto no esta disponible  ";
+		}
 		/*
 		 * Para hacer una venta
 		 * 1. Se verifica si es seguro vender, es decir, si
@@ -231,7 +269,7 @@ public class Shop {
 		 * si no: 
 		 *  - Se muestra un mensaje reportando el error.
 		 */
-		return "";
+		return out;
 		
 	}
 	
@@ -247,6 +285,20 @@ public class Shop {
 	 * @return un mensaje con el resultado del alquiler
 	 */
 	private  String rent(Rentable p, int days) {
+
+		String out;
+		double price;
+
+		if (p.isSafeRent()) {
+			price=p.getRentPrice(days);
+			p.rentProduct(days);
+			totalRents+=price;
+
+			out="El producto  ha sido alquilado";
+
+		}else{
+			out="Producto no disponible";
+		}
 		/*
 		 * Para hacer una venta
 		 * 1. Se verifica si es eguro alquilar, es decir si el producto 
@@ -259,7 +311,7 @@ public class Shop {
 		 * si no: 
 		 *  - Se muestra un mensaje reportando el error.
 		 */
-		return"";
+		return out;
 	}
 	
 
@@ -277,3 +329,4 @@ public class Shop {
 	
 
 }
+
